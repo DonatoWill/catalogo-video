@@ -39,4 +39,9 @@ public class RemoveCategoryUseCaseTests {
         assertNotNull(category);
         verify(repository, times(1)).remove(category.getId());
     }
+
+    @Test
+    void removeCategoryNotFound() {
+
+    }
 }

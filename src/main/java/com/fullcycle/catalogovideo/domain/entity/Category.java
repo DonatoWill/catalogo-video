@@ -31,6 +31,13 @@ public class Category {
         this.setDescription(description);
     }
 
+    public Category(UUID id, String name, String description, Boolean isActive) {
+        this.id = id;
+        this.setName(name);
+        this.setDescription(description);
+        this.isActive = isActive;
+    }
+
     public UUID getId() {
         return this.id;
     }

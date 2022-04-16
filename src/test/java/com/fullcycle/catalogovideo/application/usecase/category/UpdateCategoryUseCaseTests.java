@@ -1,5 +1,6 @@
 package com.fullcycle.catalogovideo.application.usecase.category;
 
+import com.fullcycle.catalogovideo.application.exception.NotFoundException;
 import com.fullcycle.catalogovideo.application.usecase.category.delete.RemoveCategoryUseCase;
 import com.fullcycle.catalogovideo.application.usecase.category.update.UpdateCategoryInputData;
 import com.fullcycle.catalogovideo.application.usecase.category.update.UpdateCategoryUseCase;
@@ -13,9 +14,9 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -61,7 +62,18 @@ public class UpdateCategoryUseCaseTests {
         assertNotNull(category);
         assertNotNull(expected);
         assertEquals(category.getName(), expected.getName());
+        assertEquals(category.getDescription(), expected.getDescription());
+    }
 
+    @Test
+    void throwNotFoundExceptionWhenIdIsInvalid() {
+        Category category = new Category("Action", "Action Description", true);
+        UpdateCategoryInputData inputData = new UpdateCategoryInputData();
+        inputData.setName("Action 2");
+        inputData.setDescription("Description");
+        inputData.setIsActive(category.getIsActive());
+
+        assertThrows(NotFoundException.class, () -> useCase.execute(UUID.randomUUID(), inputData));
     }
 
 }
