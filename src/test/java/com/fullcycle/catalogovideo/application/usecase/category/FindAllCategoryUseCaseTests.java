@@ -1,9 +1,11 @@
 package com.fullcycle.catalogovideo.application.usecase.category;
 
+import com.fullcycle.catalogovideo.application.exception.NotFoundException;
 import com.fullcycle.catalogovideo.application.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.application.usecase.category.create.CreateCategoryUseCase;
 import com.fullcycle.catalogovideo.application.usecase.category.findall.FindAllCategoryUseCase;
 import com.fullcycle.catalogovideo.domain.entity.Category;
+import com.fullcycle.catalogovideo.domain.exceptions.NotBlankException;
 import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,10 +58,26 @@ public class FindAllCategoryUseCaseTests {
 
         List<CategoryOutputData> actual = useCase.execute();
 
-        assertNotNull(categories);
-        assertEquals(2, categories.size());
+        assertNotNull(actual);
+        assertEquals(2, actual.size());
         verify(repository, times(1)).findAll();
 
         assertThat(actual).isNotNull();
     }
+
+    @Test
+    void executeReturnsEmptyList() {
+        List<Category> categories = List.of();
+
+        when(repository.findAll()).thenReturn(categories);
+
+        List<CategoryOutputData> actual = useCase.execute();
+
+        assertNotNull(categories);
+        assertEquals(0, actual.size());
+        verify(repository, times(1)).findAll();
+
+        assertThat(actual).isNotNull();
+    }
+
 }

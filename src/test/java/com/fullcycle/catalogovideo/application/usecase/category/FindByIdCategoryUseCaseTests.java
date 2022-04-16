@@ -1,5 +1,6 @@
 package com.fullcycle.catalogovideo.application.usecase.category;
 
+import com.fullcycle.catalogovideo.application.exception.NotFoundException;
 import com.fullcycle.catalogovideo.application.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.application.usecase.category.get.FindByIdCategoryUseCase;
 import com.fullcycle.catalogovideo.domain.entity.Category;
@@ -11,9 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -49,5 +52,10 @@ public class FindByIdCategoryUseCaseTests {
         verify(repository, times(1)).findById(category.getId());
 
         assertThat(actual).isNotNull();
+    }
+
+    @Test
+    void throwNotFoundExceptionWhenIdIsWrong() {
+        assertThrows(NotFoundException.class, () -> useCase.execute(UUID.randomUUID()));
     }
 }
