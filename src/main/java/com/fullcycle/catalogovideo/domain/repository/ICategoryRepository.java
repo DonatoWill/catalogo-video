@@ -9,7 +9,7 @@ import com.fullcycle.catalogovideo.domain.entity.Category;
 public interface ICategoryRepository {
     List<Category> findAll();
     Category create(Category category);
-    Optional<Category> findById(Long id);
+    Optional<Category> findById(UUID id);
     void remove(UUID id);
     void update(Category category);
 }
