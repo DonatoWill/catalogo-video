@@ -18,7 +18,7 @@ services:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=fc_catalogo_dev
+      - MYSQL_DATABASE=fc_video
       #- MYSQL_USER=root
       - MYSQL_PASSWORD=root
     security_opt:

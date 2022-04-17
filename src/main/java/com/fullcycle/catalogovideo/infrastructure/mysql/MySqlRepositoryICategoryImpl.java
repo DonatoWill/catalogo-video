@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
-public class MySqlRepositoryCategoryImpl implements ICategoryRepository {
+public class MySqlRepositoryICategoryImpl implements ICategoryRepository {
 
     private SpringDataCategoryRepository repository;
     @Override

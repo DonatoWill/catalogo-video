@@ -2,8 +2,8 @@ package com.fullcycle.catalogovideo.application.usecase.category.create;
 
 import com.fullcycle.catalogovideo.application.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.domain.entity.Category;
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
 
+import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;

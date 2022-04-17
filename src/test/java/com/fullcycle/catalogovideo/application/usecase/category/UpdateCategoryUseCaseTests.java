@@ -1,7 +1,6 @@
 package com.fullcycle.catalogovideo.application.usecase.category;
 
 import com.fullcycle.catalogovideo.application.exception.NotFoundException;
-import com.fullcycle.catalogovideo.application.usecase.category.delete.RemoveCategoryUseCase;
 import com.fullcycle.catalogovideo.application.usecase.category.update.UpdateCategoryInputData;
 import com.fullcycle.catalogovideo.application.usecase.category.update.UpdateCategoryUseCase;
 import com.fullcycle.catalogovideo.domain.entity.Category;

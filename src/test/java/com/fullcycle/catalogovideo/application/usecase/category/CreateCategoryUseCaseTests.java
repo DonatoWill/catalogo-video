@@ -8,8 +8,8 @@ import com.fullcycle.catalogovideo.application.usecase.category.common.CategoryO
 import com.fullcycle.catalogovideo.application.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.application.usecase.category.create.CreateCategoryUseCase;
 import com.fullcycle.catalogovideo.domain.entity.Category;
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
 
+import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

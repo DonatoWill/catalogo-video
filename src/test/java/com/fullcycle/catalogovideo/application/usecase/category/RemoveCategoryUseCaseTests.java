@@ -1,6 +1,5 @@
 package com.fullcycle.catalogovideo.application.usecase.category;
 
-import com.fullcycle.catalogovideo.application.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.application.usecase.category.delete.RemoveCategoryUseCase;
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
