@@ -80,8 +80,8 @@ public class Category {
         return this.isActive = true;
     }
 
-    public Boolean deactivate(){
-        return this.isActive = false;
+    public void deactivate(){
+        this.isActive = false;
     }
 
     public void update(String name, String description, Boolean isActive){
