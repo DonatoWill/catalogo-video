@@ -45,12 +45,12 @@ public class FindByIdCategoryUseCaseTests {
         Optional<Category> optionalCategory = Optional.of(category);
         //Para @Mock os dois funcionam igualmente
         //Usando when com @Spy o método é chamado, assim se houver alguma exception precisa ser tratada
-        when(repository.findById(category.getId())).thenReturn(optionalCategory);
+        when(repository.findById(UUID.fromString(category.getId().getValue()))).thenReturn(optionalCategory);
 
-        CategoryOutputData actual = useCase.execute(category.getId());
+        CategoryOutputData actual = useCase.execute(UUID.fromString(category.getId().getValue()));
 
         assertNotNull(category);
-        verify(repository, times(1)).findById(category.getId());
+        verify(repository, times(1)).findById(UUID.fromString(category.getId().getValue()));
 
         assertThat(actual).isNotNull();
     }

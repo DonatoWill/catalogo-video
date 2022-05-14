@@ -16,7 +16,7 @@ public class CategoryOutputData {
 
     public static CategoryOutputData fromDomain(Category category) {
         return new CategoryOutputData(
-                category.getId(),
+                UUID.fromString(category.getId().getValue()),
                 category.getName(),
                 category.getDescription(),
                 category.getIsActive()

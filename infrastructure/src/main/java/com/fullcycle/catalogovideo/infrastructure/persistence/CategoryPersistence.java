@@ -39,7 +39,7 @@ public class CategoryPersistence {
         if(category == null) throw new NotNullException("Category can not be null");
 
         return new CategoryPersistence(
-                category.getId(),
+                UUID.fromString(category.getId().getValue()),
                 category.getName(),
                 category.getDescription(),
                 category.getIsActive()

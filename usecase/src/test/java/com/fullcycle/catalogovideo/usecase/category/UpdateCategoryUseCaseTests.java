@@ -41,7 +41,7 @@ public class UpdateCategoryUseCaseTests {
 
         Optional<Category> optional = Optional.of(category);
 
-        when(repository.findById(category.getId())).thenReturn(optional);
+        when(repository.findById(UUID.fromString(category.getId().getValue()))).thenReturn(optional);
 
         UpdateCategoryInputData inputData = new UpdateCategoryInputData();
         inputData.setName("Action 2");
@@ -56,7 +56,7 @@ public class UpdateCategoryUseCaseTests {
 
         doNothing().when(repository).update(category);
 
-        useCase.execute(category.getId(), inputData);
+        useCase.execute(UUID.fromString(category.getId().getValue()), inputData);
 
         assertNotNull(category);
         assertNotNull(expected);

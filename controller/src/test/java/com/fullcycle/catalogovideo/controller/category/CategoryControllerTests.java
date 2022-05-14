@@ -80,7 +80,7 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output = new CategoryOutputData(
-                entity.getId(),
+                UUID.fromString(entity.getId().getValue()),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getIsActive()
@@ -109,14 +109,14 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output1 = new CategoryOutputData(
-                entity.getId(),
+                UUID.fromString(entity.getId().getValue()),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getIsActive()
         );
 
         CategoryOutputData output2 = new CategoryOutputData(
-                entity2.getId(),
+                UUID.fromString(entity2.getId().getValue()),
                 entity2.getName(),
                 entity2.getDescription(),
                 entity2.getIsActive()
@@ -141,7 +141,7 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output = new CategoryOutputData(
-                entity.getId(),
+                UUID.fromString(entity.getId().getValue()),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getIsActive()

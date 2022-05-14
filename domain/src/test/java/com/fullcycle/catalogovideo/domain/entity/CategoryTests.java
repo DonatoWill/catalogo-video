@@ -2,6 +2,7 @@ package com.fullcycle.catalogovideo.domain.entity;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.exceptions.DomainException;
+import com.fullcycle.catalogovideo.domain.validation.handler.ThrowsValidationHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -28,15 +29,6 @@ public class CategoryTests {
         assertEquals(entity.getDescription(), "Description 2");
     }
 
-    @Test
-    public void throwDoaminExceptionWhenNameIsNull(){        
-        assertThrows(DomainException.class, () -> new Category(null, "Description 2"));
-    }
-
-    @Test
-    public void throwDoaminExceptionWhenNameIsBlank(){
-        assertThrows(DomainException.class, () -> new Category(" ", "Description 2"));
-    }
 
     @Test
     public void createCategoryAndActive(){
@@ -75,5 +67,14 @@ public class CategoryTests {
         assert entity.getName().equals("Name 3");
         assertEquals(entity.getDescription(), "Description 3");
         assertFalse(entity.getIsActive());
+    }
+
+    @Test
+    public void givenAndInvalidNullName_whenCallNewCategoryAndValidate_thenShouldThrowDomainException(){
+
+        final var actualException =assertThrows(DomainException.class, () -> new Category(null, "Description 2").validate(new ThrowsValidationHandler()));
+
+        assertEquals("Name should not be null", actualException.getErrors().get(0).getMessage());
+        assertEquals(1, actualException.getErrors().size());
     }
 }

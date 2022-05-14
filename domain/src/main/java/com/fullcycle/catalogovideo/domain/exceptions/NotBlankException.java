@@ -1,6 +1,6 @@
 package com.fullcycle.catalogovideo.domain.exceptions;
 
-public class NotBlankException extends DomainException {
+public class NotBlankException extends RuntimeException {
 
     public NotBlankException() {
         super();

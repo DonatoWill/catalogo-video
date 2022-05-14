@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -32,10 +33,10 @@ public class RemoveCategoryUseCaseTests {
         );
 
         Optional<Category> optionalCategory = Optional.of(category);
-        doNothing().when(repository).remove(category.getId());
-        useCase.execute(category.getId());
+        doNothing().when(repository).remove(UUID.fromString(category.getId().getValue()));
+        useCase.execute(UUID.fromString(category.getId().getValue()));
         assertNotNull(category);
-        verify(repository, times(1)).remove(category.getId());
+        verify(repository, times(1)).remove(UUID.fromString(category.getId().getValue()));
     }
 
     @Test

@@ -12,11 +12,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.LONG_2D_ARRAY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -147,10 +150,11 @@ public class MySQLICategoryRepositoryImplTests {
         CategoryPersistence expected = CategoryPersistence.from(entity);
         doNothing()
                 .when(springDataRepository)
-                .deleteById(entity.getId());
+                .deleteById(UUID.fromString(entity.getId().getValue()));
 
-        repository.remove(entity.getId());
+        repository.remove(UUID.fromString(entity.getId().getValue()));
 
-        verify(springDataRepository, times(1)).deleteById(entity.getId());
+        verify(springDataRepository, times(1)).deleteById(UUID.fromString(entity.getId().getValue()));
     }
+
 }

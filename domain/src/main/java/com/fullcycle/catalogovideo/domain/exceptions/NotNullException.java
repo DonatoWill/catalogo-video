@@ -1,6 +1,6 @@
 package com.fullcycle.catalogovideo.domain.exceptions;
 
-public class NotNullException extends DomainException {
+public class NotNullException extends RuntimeException {
 
     public NotNullException() {
         super();
