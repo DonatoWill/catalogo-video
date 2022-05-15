@@ -1,7 +1,9 @@
-package com.fullcycle.catalogovideo.usecase.category;
+package com.fullcycle.catalogovideo.usecase.category.findAll;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
+import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
+import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.findall.FindAllCategoryUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,17 +49,26 @@ public class FindAllCategoryUseCaseTests {
                 )
         );
 
+        CategorySearchQuery query =  CategorySearchQuery.builder()
+                .direction("asc")
+                .page(0)
+                .perPage(10)
+                .sort("name")
+                .build();
+
+        final var pagination = new Pagination<>(0, 10, categories.size(), categories);
+
         //Para @Mock os dois funcionam igualmente
         //Usando when com @Spy o método é chamado, assim se houver alguma exception precisa ser tratada
-        when(repository.findAll()).thenReturn(categories);
+        when(repository.findAll()).thenReturn(pagination);
 
         //Usando doReturn com @Spy não chama o método do use case
-        doReturn(categories).when(repository).findAll();
+        //doReturn(categories).when(repository).findAll();
 
-        List<CategoryOutputData> actual = useCase.execute();
+        Pagination<CategoryOutputData> actual = useCase.execute(query);
 
         assertNotNull(actual);
-        assertEquals(2, actual.size());
+        assertEquals(2, actual.getTotal());
         verify(repository, times(1)).findAll();
 
         assertThat(actual).isNotNull();
@@ -67,12 +78,21 @@ public class FindAllCategoryUseCaseTests {
     void executeReturnsEmptyList() {
         List<Category> categories = List.of();
 
-        when(repository.findAll()).thenReturn(categories);
+        CategorySearchQuery query =  CategorySearchQuery.builder()
+                .direction("asc")
+                .page(0)
+                .perPage(10)
+                .sort("name")
+                .build();
 
-        List<CategoryOutputData> actual = useCase.execute();
+        final var pagination = new Pagination<>(0, 10, categories.size(), categories);
+
+        when(repository.findAll()).thenReturn(pagination);
+
+        Pagination<CategoryOutputData> actual = useCase.execute(query);
 
         assertNotNull(categories);
-        assertEquals(0, actual.size());
+        assertEquals(0, actual.getTotal());
         verify(repository, times(1)).findAll();
 
         assertThat(actual).isNotNull();

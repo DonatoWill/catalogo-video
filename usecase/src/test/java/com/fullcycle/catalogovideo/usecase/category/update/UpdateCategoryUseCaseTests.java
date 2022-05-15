@@ -1,9 +1,7 @@
-package com.fullcycle.catalogovideo.usecase.category;
+package com.fullcycle.catalogovideo.usecase.category.update;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
-import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
-import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryUseCase;
+import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import com.fullcycle.catalogovideo.usecase.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +11,9 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -41,9 +38,10 @@ public class UpdateCategoryUseCaseTests {
 
         Optional<Category> optional = Optional.of(category);
 
-        when(repository.findById(UUID.fromString(category.getId().getValue()))).thenReturn(optional);
+        when(repository.findById(category.getId())).thenReturn(optional);
 
         UpdateCategoryInputData inputData = new UpdateCategoryInputData();
+        inputData.setId(category.getId().getValue());
         inputData.setName("Action 2");
         inputData.setDescription("Description");
         inputData.setIsActive(category.getIsActive());
@@ -54,9 +52,9 @@ public class UpdateCategoryUseCaseTests {
                 inputData.getIsActive()
         );
 
-        doNothing().when(repository).update(category);
+        when(repository.update(any())).thenReturn(category);
 
-        useCase.execute(UUID.fromString(category.getId().getValue()), inputData);
+        useCase.execute(inputData);
 
         assertNotNull(category);
         assertNotNull(expected);
@@ -71,8 +69,8 @@ public class UpdateCategoryUseCaseTests {
         inputData.setName("Action 2");
         inputData.setDescription("Description");
         inputData.setIsActive(category.getIsActive());
+        inputData.setId(category.getId().getValue());
 
-        assertThrows(NotFoundException.class, () -> useCase.execute(UUID.randomUUID(), inputData));
+        assertThrows(NotFoundException.class, () -> useCase.execute(inputData));
     }
-
 }

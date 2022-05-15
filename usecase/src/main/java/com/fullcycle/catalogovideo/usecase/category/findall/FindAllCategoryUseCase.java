@@ -1,25 +1,22 @@
 package com.fullcycle.catalogovideo.usecase.category.findall;
 
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
+import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
+import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 @AllArgsConstructor
-public class FindAllCategoryUseCase implements IFindAllCategoryUseCase{
+public class FindAllCategoryUseCase extends IFindAllCategoryUseCase{
 
     private ICategoryRepository categoryRepository;
 
     @Override
-    public List<CategoryOutputData> execute() {
-        var list = categoryRepository.findAll();
+    public Pagination<CategoryOutputData> execute(CategorySearchQuery query) {
+        var categories = categoryRepository.findAll();
 
-        return list.stream()
-                .map(CategoryOutputData::fromDomain)
-                .collect(Collectors.toList());
+        return categories.map(CategoryOutputData::fromDomain);
     }
 }

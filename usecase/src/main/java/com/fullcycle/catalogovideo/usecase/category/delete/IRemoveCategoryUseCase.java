@@ -1,8 +1,9 @@
 package com.fullcycle.catalogovideo.usecase.category.delete;
 
+import com.fullcycle.catalogovideo.usecase.UnitUseCase;
+
 import java.util.UUID;
 
-public interface IRemoveCategoryUseCase {
+public abstract class IRemoveCategoryUseCase extends UnitUseCase<String> {
 
-    void execute(UUID id);
 }

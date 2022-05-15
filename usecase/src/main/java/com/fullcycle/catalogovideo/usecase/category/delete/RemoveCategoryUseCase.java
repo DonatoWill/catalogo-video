@@ -1,19 +1,18 @@
 package com.fullcycle.catalogovideo.usecase.category.delete;
 
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
+import com.fullcycle.catalogovideo.domain.entity.CategoryID;
+import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @AllArgsConstructor
-public class RemoveCategoryUseCase implements IRemoveCategoryUseCase {
+public class RemoveCategoryUseCase extends IRemoveCategoryUseCase {
 
     private ICategoryRepository categoryRepository;
 
     @Override
-    public void execute(UUID id) {
-        categoryRepository.remove(id);
+    public void execute(String id) {
+        categoryRepository.remove(CategoryID.from(id));
     }
 }
