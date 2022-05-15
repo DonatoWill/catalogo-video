@@ -1,8 +1,6 @@
 package com.fullcycle.catalogovideo.domain.entity;
 
 import com.fullcycle.catalogovideo.domain.AggregateRoot;
-import com.fullcycle.catalogovideo.domain.exceptions.NotBlankException;
-import com.fullcycle.catalogovideo.domain.exceptions.NotNullException;
 import com.fullcycle.catalogovideo.domain.validation.ValidationHandler;
 
 import java.time.Instant;
@@ -12,7 +10,7 @@ public class Category extends AggregateRoot<CategoryID> {
 
     private String name;
     private String description;
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
     private Instant createdAt;
 
@@ -25,26 +23,34 @@ public class Category extends AggregateRoot<CategoryID> {
         super(id);
         this.setName(name);
         this.setDescription(description);
+        this.createdAt = Instant.now();
+        this.deletedAt = isActive? null : Instant.now();
     }
     
-    public Category(String name, String description, Boolean isActive) {
+    public Category(String name, String description, boolean isActive) {
         super(CategoryID.unique());
         this.setName(name);
         this.setDescription(description);
         this.isActive = isActive;
+        this.createdAt = Instant.now();
+        this.deletedAt = isActive? null : Instant.now();
     }
 
     public Category(String name, String description) {
         super(CategoryID.unique());
         this.setName(name);
         this.setDescription(description);
+        this.createdAt = Instant.now();
+        this.deletedAt = isActive? null : Instant.now();
     }
 
-    public Category(UUID id, String name, String description, Boolean isActive) {
+    public Category(UUID id, String name, String description, boolean isActive) {
         super(CategoryID.from(id));
         this.setName(name);
         this.setDescription(description);
         this.isActive = isActive;
+        this.createdAt = Instant.now();
+        this.deletedAt = isActive? null : Instant.now();
     }
 
     @Override
@@ -62,12 +68,6 @@ public class Category extends AggregateRoot<CategoryID> {
     }
 
     public void setName(String name) {
-//        if(name == null ){
-//            throw new NotNullException("Name cannot be null empty");
-//        }
-//        if(name.trim().isEmpty()){
-//            throw new NotBlankException("Name cannot be empty");
-//        }
         this.name = name;
     }
 
@@ -79,34 +79,65 @@ public class Category extends AggregateRoot<CategoryID> {
         this.description = description;
     }
 
-    public Boolean isIsActive() {
+    public boolean isIsActive() {
         return this.isActive;
     }
 
-    public Boolean getIsActive() {
+    public boolean getIsActive() {
         return this.isActive;
     }
 
-    public Boolean active(){
-        return this.isActive = true;
+    public Category activate(){
+        this.deletedAt = null;
+        this.isActive = true;
+        this.updatedAt = Instant.now();
+        return this;
     }
 
-    public void deactivate(){
+    public Category deactivate(){
+        if(getDeletedAt() == null){
+            this.deletedAt = Instant.now();
+        }
         this.isActive = false;
+        this.updatedAt = Instant.now();
+        return this;
     }
 
-    public void update(String name, String description, Boolean isActive){
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Instant getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Instant deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+    public Category update(final String name, final String description, final boolean isActive){
         this.setName(name);
         this.setDescription(description);
-        if(isActive != null && isActive != this.isActive){
+        if(isActive != this.isActive){
             if(isActive){
-                this.active();
+                this.activate();
             }else{
                 this.deactivate();
             }
         }
+        this.updatedAt = Instant.now();
+        return this;
     }
-
-
 
 }
