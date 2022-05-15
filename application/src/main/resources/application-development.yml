@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: text/html, text/css, text/javascript, application/javascript, application/json, application/xml, application/x-javascript
+    min-response-size: 1024
+
+mysql:
+  username: ${DATABASE_MYSQL_USERNAME:root}
+  password: ${DATABASE_MYSQL_PASSWORD:root}
+  schema: adm_videos
+  url: ${DATABASE_MYSQL_URL:localhost:3306}

@@ -107,7 +107,7 @@ class CategoryControllerTest extends BaseIT{
 
         assertNotNull(category);
         assertEquals("Horror", category.getName());
-        assertTrue(category.getIsActive());
+        assertTrue(category.isActive());
         assertEquals("Horror description", category.getDescription());
     }
 
