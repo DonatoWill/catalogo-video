@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.controller.configuration.GlobalExceptionHandler;
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
-import com.fullcycle.catalogovideo.usecase.category.create.ICreateCategoryUseCase;
+import com.fullcycle.catalogovideo.usecase.category.create.AbstractCreateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.delete.IRemoveCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.findall.IFindAllCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase;
@@ -44,7 +45,7 @@ public class CategoryControllerTests {
     private CategoryController categoryController;
 
     @Mock
-    private ICreateCategoryUseCase createUseCase;
+    private AbstractCreateCategoryUseCase createUseCase;
 
     @Mock
     private IFindAllCategoryUseCase findAllUseCase;
@@ -80,10 +81,13 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output = new CategoryOutputData(
-                UUID.fromString(entity.getId().getValue()),
+                entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                entity.getIsActive()
+                entity.isIsActive(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                entity.getDeletedAt()
         );
 
         doReturn(output).when(createUseCase).execute(any(CreateCategoryInputData.class));
@@ -109,22 +113,32 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output1 = new CategoryOutputData(
-                UUID.fromString(entity.getId().getValue()),
+                entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                entity.getIsActive()
+                entity.isIsActive(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                entity.getDeletedAt()
         );
 
         CategoryOutputData output2 = new CategoryOutputData(
-                UUID.fromString(entity2.getId().getValue()),
+                entity2.getId(),
                 entity2.getName(),
                 entity2.getDescription(),
-                entity2.getIsActive()
+                entity2.isIsActive(),
+                entity2.getCreatedAt(),
+                entity2.getUpdatedAt(),
+                entity2.getDeletedAt()
         );
 
         List<CategoryOutputData> output = List.of(output1, output2);
 
-        doReturn(output).when(findAllUseCase).execute();
+        var search = CategorySearchQuery.builder()
+                        .direction("asc")
+                                .page(1)
+                                        .build();
+        doReturn(output).when(findAllUseCase).execute(search);
 
         mockMvc.perform(get("/categories")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -141,13 +155,16 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output = new CategoryOutputData(
-                UUID.fromString(entity.getId().getValue()),
+                entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                entity.getIsActive()
+                entity.isIsActive(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                entity.getDeletedAt()
         );
 
-        doReturn(output).when(findByIdUseCase).execute(any(UUID.class));
+        doReturn(output).when(findByIdUseCase).execute(any());
 
         mockMvc.perform(get("/categories/{id}", entity.getId())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -163,7 +180,7 @@ public class CategoryControllerTests {
                 "",
                 true
         );
-        doNothing().when(removeUseCase).execute(any(UUID.class));
+        doNothing().when(removeUseCase).execute(any());
         mockMvc.perform(delete("/categories/{id}", entity.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
@@ -184,7 +201,7 @@ public class CategoryControllerTests {
 
         String payload = updateJson.write(input).getJson();
 
-        doNothing().when(updateUseCase).execute(any(UUID.class), any(UpdateCategoryInputData.class));
+        doNothing().when(updateUseCase).execute(any(UpdateCategoryInputData.class));
 
         mockMvc.perform(put("/categories/{id}", entity.getId())
                 .contentType(MediaType.APPLICATION_JSON)

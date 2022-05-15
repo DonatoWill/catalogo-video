@@ -1,6 +1,8 @@
 package com.fullcycle.catalogovideo.controller.category;
 
+import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
 import io.swagger.annotations.Api;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,7 +39,7 @@ public interface ICategoryController {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    List<CategoryOutputData> findAll();
+    Pagination<CategoryOutputData> findAll(@RequestParam CategorySearchQuery query);
 
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
@@ -68,7 +69,7 @@ public interface ICategoryController {
             @ApiResponse(code = 404, message = "Category not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    void update(@PathVariable("id") UUID id, @RequestBody UpdateCategoryInputData input);
+    void update(@RequestParam String id, @RequestBody UpdateCategoryInputData input);
 
 }
 
