@@ -81,7 +81,7 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output = new CategoryOutputData(
-                entity.getId(),
+                entity.getId().getValue(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.isIsActive(),
@@ -90,7 +90,7 @@ public class CategoryControllerTests {
                 entity.getDeletedAt()
         );
 
-        doReturn(output).when(createUseCase).execute(any(CreateCategoryInputData.class));
+        doReturn(output).when(createUseCase).execute(any());
 
         mockMvc.perform(post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +113,7 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output1 = new CategoryOutputData(
-                entity.getId(),
+                entity.getId().getValue(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.isIsActive(),
@@ -123,7 +123,7 @@ public class CategoryControllerTests {
         );
 
         CategoryOutputData output2 = new CategoryOutputData(
-                entity2.getId(),
+                entity2.getId().getValue(),
                 entity2.getName(),
                 entity2.getDescription(),
                 entity2.isIsActive(),
@@ -155,7 +155,7 @@ public class CategoryControllerTests {
                 true
         );
         CategoryOutputData output = new CategoryOutputData(
-                entity.getId(),
+                entity.getId().getValue(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.isIsActive(),

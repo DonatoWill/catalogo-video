@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CategoryOutputData {
 
-    private CategoryID id;
+    private String id;
     private String name;
     private String description;
     private boolean isActive;
@@ -22,7 +22,7 @@ public class CategoryOutputData {
 
     public static CategoryOutputData fromDomain(Category category) {
         return new CategoryOutputData(
-                CategoryID.from(category.getId().getValue()),
+                category.getId().getValue(),
                 category.getName(),
                 category.getDescription(),
                 category.getIsActive(),

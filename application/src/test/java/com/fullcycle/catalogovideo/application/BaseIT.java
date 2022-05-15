@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(classes = CatalogoVideoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@ActiveProfiles("container-test")
 @Testcontainers
 public abstract class BaseIT {
 

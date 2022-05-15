@@ -2,30 +2,21 @@ package com.fullcycle.catalogovideo.infrastructure.category.persistence;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.exceptions.NotNullException;
-import lombok.*;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.Instant;
-import java.util.Objects;
-import java.util.UUID;
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "category")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
-@AllArgsConstructor
 public class CategoryPersistence {
 
     @Id
     private String id;
 
-    @Column(name= "name", nullable = false)
-    @NotNull(message = "Name can not be null")
-    @NotBlank(message = "Name can not be blank")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name= "description", length = 4000)
@@ -43,6 +34,19 @@ public class CategoryPersistence {
     @Column(name = "deleted_at", columnDefinition = "DATETIME(6)")
     private Instant deletedAt;
 
+    public CategoryPersistence() {
+
+    }
+
+    private CategoryPersistence(String id, String name, String description, boolean active, Instant createdAt, Instant updatedAt, Instant deletedAt) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
 
     public static CategoryPersistence from(Category category) {
         if(category == null) throw new NotNullException("Category can not be null");
@@ -69,17 +73,60 @@ public class CategoryPersistence {
         );
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CategoryPersistence that = (CategoryPersistence) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description) && Objects.equals(active, that.active);
+    public String getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, active);
+    public void setId(String id) {
+        this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Instant getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Instant deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
 }

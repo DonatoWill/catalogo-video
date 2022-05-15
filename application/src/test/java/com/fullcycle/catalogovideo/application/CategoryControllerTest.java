@@ -38,7 +38,7 @@ class CategoryControllerTest extends BaseIT{
         CategoryOutputData category =  response.getBody();
 
         assertNotNull(category);
-        assertEquals(UUID.fromString(id),category.getId());
+        assertEquals(id,category.getId());
         assertEquals("Ação", category.getName());
     }
 

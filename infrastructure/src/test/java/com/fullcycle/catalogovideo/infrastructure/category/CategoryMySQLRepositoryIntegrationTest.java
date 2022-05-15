@@ -2,9 +2,12 @@ package com.fullcycle.catalogovideo.infrastructure.category;
 
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
+import com.fullcycle.catalogovideo.infrastructure.MySQLRepositoryTest;
 import com.fullcycle.catalogovideo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

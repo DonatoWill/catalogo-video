@@ -1,4 +1,4 @@
-package com.fullcycle.catalogovideo.infrastructure.category;
+package com.fullcycle.catalogovideo.infrastructure;
 
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtendWith;

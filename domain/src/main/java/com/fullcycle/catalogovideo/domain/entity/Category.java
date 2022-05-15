@@ -4,6 +4,7 @@ import com.fullcycle.catalogovideo.domain.AggregateRoot;
 import com.fullcycle.catalogovideo.domain.validation.ValidationHandler;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Category extends AggregateRoot<CategoryID> {
@@ -40,9 +41,9 @@ public class Category extends AggregateRoot<CategoryID> {
         this.setName(name);
         this.setDescription(description);
         this.isActive = isActive;
-        this.createdAt = createdAt;
+        this.createdAt = Objects.requireNonNull(createdAt);
         this.deletedAt = deletedAt;
-        this.updatedAt = updatedAt;
+        this.updatedAt = Objects.requireNonNull(updatedAt);
     }
 
     public Category(String name, String description, boolean isActive) {
@@ -52,6 +53,7 @@ public class Category extends AggregateRoot<CategoryID> {
         this.isActive = isActive;
         this.createdAt = Instant.now();
         this.deletedAt = isActive? null : Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     public Category(String name, String description) {
@@ -60,6 +62,7 @@ public class Category extends AggregateRoot<CategoryID> {
         this.setDescription(description);
         this.createdAt = Instant.now();
         this.deletedAt = isActive? null : Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     public Category(UUID id, String name, String description, boolean isActive) {
@@ -69,6 +72,7 @@ public class Category extends AggregateRoot<CategoryID> {
         this.isActive = isActive;
         this.createdAt = Instant.now();
         this.deletedAt = isActive? null : Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @Override
