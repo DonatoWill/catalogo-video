@@ -1,4 +1,4 @@
-package com.fullcycle.catalogovideo.application.integration;
+package com.fullcycle.catalogovideo.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.domain.entity.Category;

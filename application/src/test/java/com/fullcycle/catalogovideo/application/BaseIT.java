@@ -1,4 +1,4 @@
-package com.fullcycle.catalogovideo.application.integration;
+package com.fullcycle.catalogovideo.application;
 
 import com.fullcycle.catalogovideo.application.CatalogoVideoApplication;
 import org.springframework.beans.factory.annotation.Autowired;

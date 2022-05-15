@@ -26,7 +26,25 @@ public class Category extends AggregateRoot<CategoryID> {
         this.createdAt = Instant.now();
         this.deletedAt = isActive? null : Instant.now();
     }
-    
+
+    public static Category newCategory(String name, String description, boolean isActive){
+        return new Category(name, description, isActive);
+    }
+
+    public static Category newCategory(String id, String name, String description, boolean isActive, Instant createdAt, Instant updatedAt, Instant deletedAt){
+        return new Category(CategoryID.from(id), name, description, isActive, createdAt, updatedAt, deletedAt);
+    }
+
+    public Category(CategoryID id, String name, String description, boolean isActive, Instant createdAt, Instant updatedAt, Instant deletedAt) {
+        super(id);
+        this.setName(name);
+        this.setDescription(description);
+        this.isActive = isActive;
+        this.createdAt = createdAt;
+        this.deletedAt = deletedAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Category(String name, String description, boolean isActive) {
         super(CategoryID.unique());
         this.setName(name);

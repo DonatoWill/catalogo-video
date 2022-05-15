@@ -1,4 +1,4 @@
-package com.fullcycle.catalogovideo.infrastructure.persistence;
+package com.fullcycle.catalogovideo.infrastructure.category.persistence;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.exceptions.NotNullException;
@@ -21,8 +21,6 @@ import javax.validation.constraints.NotNull;
 public class CategoryPersistence {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "VARBINARY(16)")
     private String id;
 
     @Column(name= "name", nullable = false)
@@ -39,7 +37,7 @@ public class CategoryPersistence {
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "updated_at", columnDefinition = "DATETIME(6)")
     private Instant updatedAt;
 
     @Column(name = "deleted_at", columnDefinition = "DATETIME(6)")
@@ -59,12 +57,15 @@ public class CategoryPersistence {
                 category.getDeletedAt()
         );
     }
-    public Category fromThis(){
-        return new Category(
-                UUID.fromString(this.id),
+    public Category toAggregate(){
+        return Category.newCategory(
+                this.id,
                 this.name,
                 this.description,
-                this.active
+                this.active,
+                this.createdAt,
+                this.updatedAt,
+                this.deletedAt
         );
     }
 
