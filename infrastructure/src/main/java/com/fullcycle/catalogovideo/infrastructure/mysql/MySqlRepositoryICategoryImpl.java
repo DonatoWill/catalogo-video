@@ -1,16 +1,15 @@
 package com.fullcycle.catalogovideo.infrastructure.mysql;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
-import com.fullcycle.catalogovideo.domain.repository.ICategoryRepository;
+import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.infrastructure.data.SpringDataCategoryRepository;
 import com.fullcycle.catalogovideo.infrastructure.persistence.CategoryPersistence;
+import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
+import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 @AllArgsConstructor
@@ -18,11 +17,11 @@ public class MySqlRepositoryICategoryImpl implements ICategoryRepository {
 
     private SpringDataCategoryRepository repository;
     @Override
-    public List<Category> findAll() {
-        return repository.findAll()
-                .parallelStream()
-                .map(CategoryPersistence::fromThis)
-                .collect(Collectors.toList());
+    public Pagination<Category> findAll() {
+        return null;//repository.findAll()
+//                .parallelStream()
+//                .map(CategoryPersistence::fromThis)
+//                .collect(Pagination::map);
     }
 
     @Override
@@ -32,19 +31,19 @@ public class MySqlRepositoryICategoryImpl implements ICategoryRepository {
     }
 
     @Override
-    public Optional<Category> findById(UUID id) {
-        return repository.findById(id)
+    public Optional<Category> findById(CategoryID id) {
+        return repository.findById(id.getValue())
                 .map(CategoryPersistence::fromThis);
     }
 
     @Override
-    public void remove(UUID id) {
-        repository.deleteById(id);
+    public void remove(CategoryID id) {
+        repository.deleteById(id.getValue());
     }
 
     @Override
-    public void update(Category category) {
+    public Category update(Category category) {
         final CategoryPersistence entity = CategoryPersistence.from(category);
-        repository.save(entity);
+        return repository.save(entity).fromThis();
     }
 }

@@ -1,10 +1,11 @@
 plugins {
 	id 'java'
+	id 'application'
 }
 
 group = 'com.fullcycle.catalogovideo'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 configurations {
 	compileOnly {
@@ -15,6 +16,7 @@ configurations {
 repositories {
 	mavenCentral()
 }
+
 
 dependencies {
 
