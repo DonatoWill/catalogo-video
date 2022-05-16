@@ -3,6 +3,7 @@ package com.fullcycle.catalogovideo.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
 import org.junit.jupiter.api.*;
@@ -45,7 +46,8 @@ class CategoryControllerTest extends BaseIT{
     @Test
     @Order(2)
     void testFindAllCategory() {
-        ResponseEntity<CategoryOutputData[]> response = restTemplate.getForEntity( "/categories", CategoryOutputData[].class);
+        ResponseEntity<CategoryOutputData[]> response =
+                restTemplate.getForEntity( "/categories", CategoryOutputData[].class);
         List<CategoryOutputData> categories =  List.of(Objects.requireNonNull(response.getBody()));
 
         assertNotNull(categories);

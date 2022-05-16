@@ -34,7 +34,8 @@ dependencies {
     testImplementation('org.testcontainers:mysql:1.16.3')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 
-    testImplementation('org.flywaydb:flyway-core')
+    implementation 'io.vavr:vavr:0.10.4'
+
 }
 
 test {

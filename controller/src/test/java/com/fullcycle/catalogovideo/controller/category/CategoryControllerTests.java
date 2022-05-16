@@ -12,6 +12,8 @@ import com.fullcycle.catalogovideo.usecase.category.findall.IFindAllCategoryUseC
 import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.IUpdateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
+import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
+import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +31,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -90,7 +91,7 @@ public class CategoryControllerTests {
                 entity.getDeletedAt()
         );
 
-        doReturn(output).when(createUseCase).execute(any());
+        when(createUseCase.execute(any())).thenReturn(Either.right(output));
 
         mockMvc.perform(post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -136,15 +137,20 @@ public class CategoryControllerTests {
 
         var search = CategorySearchQuery.builder()
                         .direction("asc")
-                                .page(1)
-                                        .build();
-        doReturn(output).when(findAllUseCase).execute(search);
+                        .page(1)
+                        .build();
+
+        when(findAllUseCase.execute(any())).thenReturn(new Pagination(1, 10, 20, output));
 
         mockMvc.perform(get("/categories")
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("page", "1")
+                .param("perPage", "10")
+                .param("sort", "name")
+                .param("terms", "")
+                .param("direction", "asc"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -166,7 +172,7 @@ public class CategoryControllerTests {
 
         doReturn(output).when(findByIdUseCase).execute(any());
 
-        mockMvc.perform(get("/categories/{id}", entity.getId())
+        mockMvc.perform(get("/categories/{id}", UUID.fromString(entity.getId().getValue()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -180,8 +186,9 @@ public class CategoryControllerTests {
                 "",
                 true
         );
+
         doNothing().when(removeUseCase).execute(any());
-        mockMvc.perform(delete("/categories/{id}", entity.getId())
+        mockMvc.perform(delete("/categories/{id}", UUID.fromString(entity.getId().getValue()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
@@ -194,16 +201,27 @@ public class CategoryControllerTests {
                 true
         );
 
+        CategoryOutputData output = new CategoryOutputData(
+                entity.getId().getValue(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.isIsActive(),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                entity.getDeletedAt()
+        );
+
         UpdateCategoryInputData input = new UpdateCategoryInputData();
+        input.setId(entity.getId().getValue());
         input.setName("Horror");
         input.setDescription(entity.getDescription());
         input.setIsActive(entity.getIsActive());
 
         String payload = updateJson.write(input).getJson();
 
-        doNothing().when(updateUseCase).execute(any(UpdateCategoryInputData.class));
+        when(updateUseCase.execute(any(UpdateCategoryInputData.class))).thenReturn(Either.right(output));
 
-        mockMvc.perform(put("/categories/{id}", entity.getId())
+        mockMvc.perform(put("/categories/{id}", entity.getId().getValue())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload))
                 .andExpect(status().isNoContent());

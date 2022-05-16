@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.UUID;
 
 @RestController
@@ -39,7 +40,7 @@ public interface ICategoryController {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    Pagination<CategoryOutputData> findAll(@RequestParam CategorySearchQuery query);
+    Pagination<CategoryOutputData> findAll(CategorySearchQuery query);
 
     @GetMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
@@ -69,7 +70,7 @@ public interface ICategoryController {
             @ApiResponse(code = 404, message = "Category not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    void update(@RequestParam String id, @RequestBody UpdateCategoryInputData input);
+    void update(@PathVariable String id, @RequestBody UpdateCategoryInputData input);
 
 }
 

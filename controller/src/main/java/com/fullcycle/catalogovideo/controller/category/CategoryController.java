@@ -29,13 +29,12 @@ public class CategoryController implements ICategoryController {
 
     @Override
     public CategoryOutputData createCategory(CreateCategoryInputData input) {
-        return null; //createUseCase.execute(input);
+        return createUseCase.execute(input).get();
     }
 
     @Override
     public Pagination<CategoryOutputData> findAll(CategorySearchQuery query) {
-        //var categories = findAllUseCase.execute();
-        return null;
+        return findAllUseCase.execute(query);
     }
 
     @Override
@@ -51,6 +50,6 @@ public class CategoryController implements ICategoryController {
     @Override
     public void update(String id, UpdateCategoryInputData input) {
         input.setId(id);
-        //updateUseCase.execute(input);
+        updateUseCase.execute(input);
     }
 }
