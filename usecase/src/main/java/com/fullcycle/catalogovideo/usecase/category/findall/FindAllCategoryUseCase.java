@@ -5,9 +5,7 @@ import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @AllArgsConstructor
 public class FindAllCategoryUseCase extends IFindAllCategoryUseCase{
 
@@ -15,7 +13,7 @@ public class FindAllCategoryUseCase extends IFindAllCategoryUseCase{
 
     @Override
     public Pagination<CategoryOutputData> execute(CategorySearchQuery query) {
-        var categories = categoryRepository.findAll();
+        var categories = categoryRepository.findAll(query);
 
         return categories.map(CategoryOutputData::fromDomain);
     }

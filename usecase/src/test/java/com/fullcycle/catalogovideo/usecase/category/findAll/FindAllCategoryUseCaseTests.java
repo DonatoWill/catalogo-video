@@ -60,7 +60,7 @@ public class FindAllCategoryUseCaseTests {
 
         //Para @Mock os dois funcionam igualmente
         //Usando when com @Spy o método é chamado, assim se houver alguma exception precisa ser tratada
-        when(repository.findAll()).thenReturn(pagination);
+        when(repository.findAll(any())).thenReturn(pagination);
 
         //Usando doReturn com @Spy não chama o método do use case
         //doReturn(categories).when(repository).findAll();
@@ -69,7 +69,7 @@ public class FindAllCategoryUseCaseTests {
 
         assertNotNull(actual);
         assertEquals(2, actual.getTotal());
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAll(any());
 
         assertThat(actual).isNotNull();
     }
@@ -87,13 +87,13 @@ public class FindAllCategoryUseCaseTests {
 
         final var pagination = new Pagination<>(0, 10, categories.size(), categories);
 
-        when(repository.findAll()).thenReturn(pagination);
+        when(repository.findAll(any())).thenReturn(pagination);
 
         Pagination<CategoryOutputData> actual = useCase.execute(query);
 
         assertNotNull(categories);
         assertEquals(0, actual.getTotal());
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAll(any());
 
         assertThat(actual).isNotNull();
     }

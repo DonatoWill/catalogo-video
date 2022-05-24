@@ -9,9 +9,7 @@ import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import io.vavr.API;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @AllArgsConstructor
 public class UpdateCategoryUseCase extends IUpdateCategoryUseCase {
 

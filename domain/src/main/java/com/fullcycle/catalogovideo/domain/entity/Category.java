@@ -162,4 +162,21 @@ public class Category extends AggregateRoot<CategoryID> {
         return this;
     }
 
+    @Override
+    public Category clone() {
+        try {
+            return (Category) super.clone();
+        }catch (CloneNotSupportedException ex){
+            return new Category(
+                    this.getId(),
+                    this.name,
+                    this.getDescription(),
+                    this.isActive,
+                    this.createdAt,
+                    this.updatedAt,
+                    this.deletedAt
+            );
+        }
+
+    }
 }

@@ -5,9 +5,7 @@ import com.fullcycle.catalogovideo.usecase.exception.NotFoundException;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @AllArgsConstructor
 public class FindByIdCategoryUseCase extends IFindByIdCategoryUseCase {
 

@@ -31,10 +31,10 @@ public class RemoveCategoryUseCaseTests {
         );
 
         Optional<Category> optionalCategory = Optional.of(category);
-        doNothing().when(repository).remove(category.getId());
+        doNothing().when(repository).deleteById(category.getId());
         useCase.execute(category.getId().getValue());
         assertNotNull(category);
-        verify(repository, times(1)).remove(category.getId());
+        verify(repository, times(1)).deleteById(category.getId());
     }
 
 }

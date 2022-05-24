@@ -4,11 +4,18 @@ import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.infrastructure.category.persistence.CategoryPersistence;
 import com.fullcycle.catalogovideo.infrastructure.category.persistence.CategoryRepository;
+import com.fullcycle.catalogovideo.infrastructure.utils.SpecificationUtils;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+
+import static com.fullcycle.catalogovideo.infrastructure.utils.SpecificationUtils.like;
 
 @Component
 public class CategoryMySQLRepository implements ICategoryRepository {
@@ -20,8 +27,31 @@ public class CategoryMySQLRepository implements ICategoryRepository {
     }
 
     @Override
-    public Pagination<Category> findAll() {
-        return null;//repository.findAll();
+    public Pagination<Category> findAll(CategorySearchQuery query) {
+
+        //Paginação
+        final var page = PageRequest.of(
+                query.getPage(),
+                query.getPerPage(),
+                Sort.by(Sort.Direction.fromString(query.getDirection()), query.getSort())
+        );
+
+        // Busca dinâmica
+        final var specifications = Optional.ofNullable(query.getTerms())
+                .filter(str -> !str.isBlank())
+                .map(str -> SpecificationUtils
+                        .<CategoryPersistence>like("name", str)
+                        .or(like("description", str))
+                ).orElse(null);
+
+        final var pageResult = repository.findAll(Specification.where(specifications), page);
+
+        return new Pagination<>(
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.map(CategoryPersistence::toAggregate).toList()
+        );
     }
 
     @Override
@@ -35,8 +65,10 @@ public class CategoryMySQLRepository implements ICategoryRepository {
     }
 
     @Override
-    public void remove(CategoryID id) {
-        repository.deleteById(id.getValue());
+    public void deleteById(CategoryID id) {
+        if(repository.existsById(id.getValue())){
+            repository.deleteById(id.getValue());
+        }
     }
 
     @Override

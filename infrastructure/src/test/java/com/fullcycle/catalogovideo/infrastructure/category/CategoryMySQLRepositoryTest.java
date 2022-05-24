@@ -58,34 +58,6 @@ public class CategoryMySQLRepositoryTest {
 
     }
 
-    @Test
-    void findAllCategories() {
-        Category entity1 = new Category(
-                "Action",
-                "Action Description",
-                true
-        );
-
-        Category entity2 = new Category(
-                "Horror",
-                "Horror Description",
-                true
-        );
-
-        List<CategoryPersistence> expected = List.of(
-                CategoryPersistence.from(entity1),
-                CategoryPersistence.from(entity2)
-        );
-        doReturn(expected)
-                .when(categoryRepository)
-                .findAll();
-
-        Pagination<Category> actual = repository.findAll();
-
-        assertNotNull(actual);
-        assertThat(actual.getItems()).isNotEmpty();
-        assertThat(actual.getItems()).hasSize(2);
-    }
 
     @Test
     void findById() {
@@ -148,8 +120,10 @@ public class CategoryMySQLRepositoryTest {
         doNothing()
                 .when(categoryRepository)
                 .deleteById(entity.getId().getValue());
+        when(categoryRepository.existsById(any())).thenReturn(true);
 
-        repository.remove(entity.getId());
+
+        repository.deleteById(entity.getId());
 
         verify(categoryRepository, times(1)).deleteById(entity.getId().getValue());
     }
