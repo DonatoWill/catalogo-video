@@ -35,7 +35,7 @@ public class FindByIdCategoryUseCaseTests {
     }
 
     @Test
-    void executeReturnsFindAllCategory() {
+    void executeReturnsFindCategoryById() {
         Category category =  new Category(
                         "Action",
                         "Action Description",

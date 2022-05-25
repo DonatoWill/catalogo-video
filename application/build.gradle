@@ -50,6 +50,10 @@ dependencies {
     testImplementation('org.testcontainers:junit-jupiter:1.16.3')
     testImplementation('org.testcontainers:mysql:1.16.3')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation group: 'com.h2database', name: 'h2', version: '2.1.212'
+
+    implementation 'io.vavr:vavr:0.10.4'
+
 }
 
 

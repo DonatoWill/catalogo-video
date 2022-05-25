@@ -1,6 +1,7 @@
-package com.fullcycle.catalogovideo.application;
+package com.fullcycle.catalogovideo.application.category.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fullcycle.catalogovideo.application.BaseIT;
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
@@ -20,7 +21,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CategoryControllerTest extends BaseIT{
+class CategoryControllerTest extends BaseIT {
 
     private JacksonTester<CreateCategoryInputData> createJson;
 

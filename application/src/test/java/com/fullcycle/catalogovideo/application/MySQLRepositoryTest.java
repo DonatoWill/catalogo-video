@@ -1,4 +1,4 @@
-package com.fullcycle.catalogovideo.infrastructure;
+package com.fullcycle.catalogovideo.application;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
