@@ -6,6 +6,7 @@ import com.fullcycle.catalogovideo.controller.ControllerTest;
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.domain.exceptions.DomainException;
+import com.fullcycle.catalogovideo.domain.exceptions.NotFoundException;
 import com.fullcycle.catalogovideo.domain.validation.Error;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
@@ -176,6 +177,30 @@ public class CategoryControllerTestIT {
                 .andExpect(jsonPath("$.description", equalTo(expectedDescription)))
                 .andExpect(jsonPath("$.is_active", equalTo(expectedIsActive)))
                 .andExpect(jsonPath("$.created_at", equalTo(aCategory.getCreatedAt().toString())));
+
+        verify(findByIdUseCase, times(1)).execute(eq(expectedId));
+
+
+    }
+
+    @Test
+    void givenAInvalidId_whenCallsGetCategory_shouldThrowError() throws Exception {
+
+        final var expectedError = "Category with Id 123 was not found";
+        final var expectedId = CategoryID.from("123").getValue();
+
+        when(findByIdUseCase.execute(any()))
+                .thenThrow(NotFoundException.with(
+                        Category.class,
+                        CategoryID.from(expectedId)
+                        )
+                );
+
+        final var request = get("/categories/{id}", expectedId);
+
+        final var response = this.mvc.perform(request).andDo(print());
+
+        response.andExpect(status().isNotFound());
 
         verify(findByIdUseCase, times(1)).execute(eq(expectedId));
 

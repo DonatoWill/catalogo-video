@@ -7,20 +7,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {NotFoundException.class})
+    @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.from(ex));
     }
 
-    @ExceptionHandler(value = {DomainException.class})
+    @ExceptionHandler(value = DomainException.class)
     public ResponseEntity<?> handleDomainException(final DomainException ex) {
         return ResponseEntity.unprocessableEntity()
                 .body(ApiError.from(ex));
