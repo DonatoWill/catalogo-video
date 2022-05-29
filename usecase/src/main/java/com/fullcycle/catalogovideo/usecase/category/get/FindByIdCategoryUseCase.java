@@ -1,7 +1,8 @@
 package com.fullcycle.catalogovideo.usecase.category.get;
 
+import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
-import com.fullcycle.catalogovideo.usecase.exception.NotFoundException;
+import com.fullcycle.catalogovideo.domain.exceptions.NotFoundException;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,6 @@ public class FindByIdCategoryUseCase extends IFindByIdCategoryUseCase {
     public CategoryOutputData execute(String id) {
         return repository.findById(CategoryID.from(id))
                 .map(CategoryOutputData::fromDomain)
-                .orElseThrow(() -> new NotFoundException("Category %s not found", id));
+                .orElseThrow(() -> NotFoundException.with(Category.class, CategoryID.from(id)));
     }
 }

@@ -9,7 +9,6 @@ import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryUseCase
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -35,13 +34,13 @@ public class CreateCategoryUseCaseIT {
         final var actualOutput = useCase.execute(input).get();
 
         assertNotNull(actualOutput);
-        assertThat(actualOutput.getName()).isEqualTo(category.getName());
         assertNotNull(actualOutput.getId());
         assertEquals(1, repository.count());
+
         final var actualCategory = repository.findById(actualOutput.getId()).get();
 
-        assertEquals(actualOutput.getName(), actualCategory.getName());
-        assertEquals(actualOutput.getDescription(), actualCategory.getDescription());
+        assertEquals(input.getName(), actualCategory.getName());
+        assertEquals(input.getDescription(), actualCategory.getDescription());
         assertNotNull(actualCategory.getCreatedAt());
 
     }
@@ -59,18 +58,14 @@ public class CreateCategoryUseCaseIT {
         final var actualOutput = useCase.execute(input).get();
 
         assertNotNull(actualOutput);
-        assertThat(actualOutput.getName()).isEqualTo(category.getName());
         assertNotNull(actualOutput.getId());
-        assertThat(actualOutput.isActive()).isTrue();
         assertEquals(1, repository.count());
 
 
         final var actualCategory = repository.findById(actualOutput.getId()).get();
 
-        assertEquals(actualOutput.getName(), actualCategory.getName());
-        assertEquals(actualOutput.getDescription(), actualCategory.getDescription());
+        assertEquals(actualOutput.getId(), actualCategory.getId());
         assertNotNull(actualCategory.getCreatedAt());
-        assertEquals(actualOutput.isActive(), actualCategory.isActive());
     }
 
 

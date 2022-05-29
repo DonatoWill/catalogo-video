@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
-import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -51,13 +50,13 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    public CategoryOutputData findById(UUID id) {
-        return findByIdUseCase.execute(CategoryID.from(id).getValue());
+    public CategoryOutputData findById(String id) {
+        return findByIdUseCase.execute(id);
     }
 
     @Override
-    public void deleteById(UUID id) {
-        removeUseCase.execute(CategoryID.from(id).getValue());
+    public void deleteById(String id) {
+        removeUseCase.execute(id);
     }
 
     @Override

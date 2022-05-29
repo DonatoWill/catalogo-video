@@ -2,7 +2,6 @@ package com.fullcycle.catalogovideo.usecase.category.create;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
-import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,8 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -42,9 +41,7 @@ public class CreateCategoryUseCaseTests {
             category.isIsActive()
         );
 
-        CategoryOutputData actual = useCase.execute(input).get();
-
-        assertThat(actual.getName()).isEqualTo(category.getName());
+        CreateCategoryOutput actual = useCase.execute(input).get();
         assertNotNull(actual.getId());
 
     }
@@ -61,11 +58,9 @@ public class CreateCategoryUseCaseTests {
             true
         );
 
-        CategoryOutputData actual = useCase.execute(input).get();
+        CreateCategoryOutput actual = useCase.execute(input).get();
         repository.create(category);
-
-        assertThat(actual.getName()).isEqualTo(category.getName());
-        assertThat(actual.isActive()).isTrue();
+        assertNotNull(actual.getId());
     }
 
     @Test
@@ -80,11 +75,10 @@ public class CreateCategoryUseCaseTests {
             false
         );
 
-        CategoryOutputData actual = useCase.execute(input).get();
+        CreateCategoryOutput actual = useCase.execute(input).get();
         repository.create(category);
 
-        assertThat(actual.getName()).isEqualTo(category.getName());
-        assertThat(actual.isActive()).isFalse();
+        assertNotNull(actual.getId());
     }
 
     @Test
@@ -99,11 +93,10 @@ public class CreateCategoryUseCaseTests {
             true
         );
 
-        CategoryOutputData actual = useCase.execute(input).get();
+        CreateCategoryOutput actual = useCase.execute(input).get();
         repository.create(category);
 
-        assertThat(actual.getName()).isEqualTo(category.getName());
-        assertThat(actual.isActive()).isTrue();
+        assertNotNull(actual.getId());
     }
 
     @Test
@@ -118,11 +111,10 @@ public class CreateCategoryUseCaseTests {
             true
         );
 
-        CategoryOutputData actual = useCase.execute(input).get();
+        CreateCategoryOutput actual = useCase.execute(input).get();
         repository.create(category);
 
-        assertThat(actual.getName()).isEqualTo(category.getName());
-        assertThat(actual.isActive()).isTrue();
+        assertNotNull(actual.getId());
     }
 
     @Test

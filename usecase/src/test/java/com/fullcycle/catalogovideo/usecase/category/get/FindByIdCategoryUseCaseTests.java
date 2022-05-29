@@ -2,9 +2,9 @@ package com.fullcycle.catalogovideo.usecase.category.get;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
+import com.fullcycle.catalogovideo.domain.exceptions.NotFoundException;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
-import com.fullcycle.catalogovideo.usecase.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

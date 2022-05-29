@@ -2,12 +2,15 @@ package com.fullcycle.catalogovideo.application.category.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.application.BaseIT;
-import com.fullcycle.catalogovideo.domain.entity.Category;
+import com.fullcycle.catalogovideo.domain.exceptions.DomainException;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
-import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
+import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
+import net.minidev.json.parser.JSONParser;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.*;
@@ -74,57 +77,23 @@ class CategoryControllerTest extends BaseIT {
 
         HttpEntity<String> entity = new HttpEntity<>(payload, headers);
 
-        ResponseEntity<CategoryOutputData> response = restTemplate.postForEntity( "/categories", entity, CategoryOutputData.class);
-        CategoryOutputData category =  response.getBody();
+        var response = restTemplate.postForEntity( "/categories", entity, CreateCategoryOutput.class);
+        CreateCategoryOutput category =  response.getBody();
 
         assertNotNull(category);
-        assertEquals("Action", category.getName());
-        assertEquals("Action description", category.getDescription());
+        assertNotNull(category.getId());
     }
-
-//    @Test
-//    @Order(4)
-//    void testUpdateCategory() throws IOException {
-//
-//        Category update = new Category(
-//                UUID.fromString("54f22ca3-866f-46d3-a149-198090353651"),
-//                "Action",
-//                "Horror description",
-//                true
-//        );
-//
-//        UpdateCategoryInputData input = new UpdateCategoryInputData();
-//        input.setName("Horror");
-//        input.setDescription(update.getDescription());
-//        input.setIsActive(update.getIsActive());
-//
-//        String payload = updateJson.write(input).getJson();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//        HttpEntity<String> entity = new HttpEntity<>(payload, headers);
-//        restTemplate.put( "/categories/{id}", entity, update.getId());
-//
-//        ResponseEntity<CategoryOutputData> response = restTemplate.getForEntity( "/categories/{id}",
-//                CategoryOutputData.class, update.getId());
-//
-//        CategoryOutputData category =  response.getBody();
-//
-//        assertNotNull(category);
-//        assertEquals("Horror", category.getName());
-//        assertTrue(category.isActive());
-//        assertEquals("Horror description", category.getDescription());
-//    }
 
     @Test
     @Order(4)
-    void testRemoveCategory() {
+    void testRemoveCategory() throws JSONException {
         String id = "54f22ca3-866f-46d3-a149-198090353651";
         restTemplate.delete( "/categories/{id}", UUID.fromString(id));
         ResponseEntity<String> response = restTemplate.getForEntity( "/categories/{id}", String.class, id);
 
+        var jsonResponse = new JSONObject(response.getBody());
+
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Category 54f22ca3-866f-46d3-a149-198090353651 not found", response.getBody());
+        assertEquals("Category with Id "+ id +" was not found", jsonResponse.getString("message"));
     }
 }

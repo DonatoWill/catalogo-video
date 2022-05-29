@@ -3,10 +3,12 @@ package com.fullcycle.catalogovideo.controller.category;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.controller.ControllerTest;
+import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.domain.exceptions.DomainException;
 import com.fullcycle.catalogovideo.domain.validation.Error;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
+import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.create.AbstractCreateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
@@ -14,16 +16,13 @@ import com.fullcycle.catalogovideo.usecase.category.delete.IRemoveCategoryUseCas
 import com.fullcycle.catalogovideo.usecase.category.findall.IFindAllCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.IUpdateCategoryUseCase;
-import io.vavr.control.Either;
-import org.hamcrest.Matchers;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Objects;
 
@@ -32,6 +31,7 @@ import static io.vavr.API.Right;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -66,7 +66,7 @@ public class CategoryControllerTestIT {
         when(createUseCase.execute(any()))
                 .thenReturn(Right(CreateCategoryOutput.from("123")));
 
-        final var request = MockMvcRequestBuilders.post("/categories")
+        final var request = post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -97,7 +97,7 @@ public class CategoryControllerTestIT {
         when(createUseCase.execute(any()))
                 .thenReturn(Left(Notification.create(new Error("Name should not be null"))));
 
-        final var request = MockMvcRequestBuilders.post("/categories")
+        final var request = post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -129,7 +129,7 @@ public class CategoryControllerTestIT {
         when(createUseCase.execute(any()))
                 .thenThrow(DomainException.with(new Error("Name should not be null")));
 
-        final var request = MockMvcRequestBuilders.post("/categories")
+        final var request = post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(aCommand));
 
@@ -148,5 +148,37 @@ public class CategoryControllerTestIT {
                         && Objects.equals(expectedDescription, cmd.getDescription())
                         && Objects.equals(expectedIsActive, cmd.getIsActive())
         ));
+    }
+
+    @Test
+    void givenAValidId_whenCallsGetCategory_shouldReturnCategory() throws Exception {
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = true;
+
+        final var aCategory = Category.newCategory(
+                expectedName, expectedDescription, expectedIsActive
+        );
+
+        final var expectedId = aCategory.getId().getValue();
+
+        when(findByIdUseCase.execute(any()))
+                .thenReturn(CategoryOutputData.fromDomain(aCategory));
+
+        final var request = get("/categories/{id}", expectedId);
+
+        final var response = this.mvc.perform(request).andDo(print());
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(expectedId)))
+                .andExpect(jsonPath("$.name", equalTo(expectedName)))
+                .andExpect(jsonPath("$.description", equalTo(expectedDescription)))
+                .andExpect(jsonPath("$.is_active", equalTo(expectedIsActive)))
+                .andExpect(jsonPath("$.created_at", equalTo(aCategory.getCreatedAt().toString())));
+
+        verify(findByIdUseCase, times(1)).execute(eq(expectedId));
+
+
     }
 }

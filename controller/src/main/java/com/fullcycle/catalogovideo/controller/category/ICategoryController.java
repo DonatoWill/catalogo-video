@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @Component
 @RequestMapping("/categories")
@@ -50,7 +48,7 @@ public interface ICategoryController {
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    CategoryOutputData findById(@PathVariable("id") UUID id);
+    CategoryOutputData findById(@PathVariable("id") String id);
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
@@ -60,7 +58,7 @@ public interface ICategoryController {
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    void deleteById(@PathVariable("id") UUID id);
+    void deleteById(@PathVariable("id") String id);
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)

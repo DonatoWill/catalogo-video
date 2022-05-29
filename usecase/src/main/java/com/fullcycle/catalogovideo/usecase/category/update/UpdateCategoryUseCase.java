@@ -2,9 +2,9 @@ package com.fullcycle.catalogovideo.usecase.category.update;
 
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
+import com.fullcycle.catalogovideo.domain.exceptions.NotFoundException;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
-import com.fullcycle.catalogovideo.usecase.exception.NotFoundException;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import io.vavr.API;
 import io.vavr.control.Either;
@@ -21,7 +21,7 @@ public class UpdateCategoryUseCase extends IUpdateCategoryUseCase {
         final var notification = Notification.create();
 
         var category = repository.findById(CategoryID.from(inputData.getId()))
-                .orElseThrow(() -> new NotFoundException("Category %s not found", inputData.getId()));
+                .orElseThrow(() -> NotFoundException.with(Category.class, CategoryID.from(inputData.getId())));
 
         category.update(
                 inputData.getName(),

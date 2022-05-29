@@ -93,7 +93,7 @@ public class CategoryControllerTests {
                 .content(payload))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name", equalTo("Action")));
+                .andExpect(jsonPath("$.id", equalTo(entity.getId().getValue())));
     }
 
     @Test
