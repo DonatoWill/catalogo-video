@@ -27,8 +27,9 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    implementation('org.springdoc:springdoc-openapi-webmvc-core:1.6.8')
+    implementation('org.springdoc:springdoc-openapi-ui:1.6.8')
 
     testImplementation('org.testcontainers:junit-jupiter:1.16.3')
     testImplementation('org.testcontainers:mysql:1.16.3')

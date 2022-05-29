@@ -3,10 +3,12 @@ package com.fullcycle.catalogovideo.controller.category;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.controller.configuration.GlobalExceptionHandler;
 import com.fullcycle.catalogovideo.domain.entity.Category;
+import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.create.AbstractCreateCategoryUseCase;
+import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.category.delete.IRemoveCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.findall.IFindAllCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase;
@@ -28,6 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.UUID;
 
+import static io.vavr.API.Right;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,17 +84,9 @@ public class CategoryControllerTests {
                 "",
                 true
         );
-        CategoryOutputData output = new CategoryOutputData(
-                entity.getId().getValue(),
-                entity.getName(),
-                entity.getDescription(),
-                entity.isIsActive(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getDeletedAt()
-        );
 
-        when(createUseCase.execute(any())).thenReturn(Either.right(output));
+
+        when(createUseCase.execute(any())).thenReturn(Right(CreateCategoryOutput.from(entity.getId().getValue())));
 
         mockMvc.perform(post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)

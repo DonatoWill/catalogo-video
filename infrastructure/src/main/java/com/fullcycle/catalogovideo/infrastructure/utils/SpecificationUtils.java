@@ -8,7 +8,7 @@ public class SpecificationUtils {
 
     public static <T> Specification<T> like(final String prop, final String term){
         return (root, query1, cb) ->
-                cb.like(cb.upper(root.get("name")), like(term));
+                cb.like(cb.upper(root.get(prop)), like(term));
     }
 
     private static String like(final String term) {

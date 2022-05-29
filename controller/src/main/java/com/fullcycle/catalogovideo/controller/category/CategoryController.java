@@ -2,6 +2,8 @@ package com.fullcycle.catalogovideo.controller.category;
 
 
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
+import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
+import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
@@ -13,9 +15,12 @@ import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase
 import com.fullcycle.catalogovideo.usecase.category.update.IUpdateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Component
 @AllArgsConstructor
@@ -28,8 +33,16 @@ public class CategoryController implements ICategoryController {
     private IFindAllCategoryUseCase findAllUseCase;
 
     @Override
-    public CategoryOutputData createCategory(CreateCategoryInputData input) {
-        return createUseCase.execute(input).get();
+    public ResponseEntity<?> createCategory(CreateCategoryInputData input) {
+
+        final Function<Notification, ResponseEntity<?>> onError = notification ->
+                ResponseEntity.unprocessableEntity().body(notification);
+
+        final Function<CreateCategoryOutput, ResponseEntity<?>> onSuccess = output ->
+                ResponseEntity.created(URI.create("/categories/" + output.getId())).body(output);
+
+        return createUseCase.execute(input)
+                .fold(onError, onSuccess);
     }
 
     @Override

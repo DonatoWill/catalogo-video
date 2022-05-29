@@ -14,6 +14,7 @@ import java.time.Instant;
 public class CategoryPersistence {
 
     @Id
+    @Column(name = "id", length = 36)
     private String id;
 
     @Column(name = "name", nullable = false)
