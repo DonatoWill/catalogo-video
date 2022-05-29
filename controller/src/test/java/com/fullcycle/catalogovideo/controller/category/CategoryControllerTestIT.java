@@ -18,6 +18,8 @@ import com.fullcycle.catalogovideo.usecase.category.findall.IFindAllCategoryUseC
 import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.IUpdateCategoryUseCase;
 
+import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
+import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryOutput;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -180,7 +182,6 @@ public class CategoryControllerTestIT {
 
         verify(findByIdUseCase, times(1)).execute(eq(expectedId));
 
-
     }
 
     @Test
@@ -197,13 +198,45 @@ public class CategoryControllerTestIT {
                 );
 
         final var request = get("/categories/{id}", expectedId);
+        final var response = this.mvc.perform(request).andDo(print());
+        response.andExpect(status().isNotFound());
+        verify(findByIdUseCase, times(1)).execute(eq(expectedId));
+
+    }
+
+    @Test
+    void givenAValidId_whenCallsUpdateCategory_shouldReturnCategoryId() throws Exception {
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = true;
+        final var expectedId = "123";
+
+        when(updateUseCase.execute(any()))
+                .thenReturn(Right(UpdateCategoryOutput.from(expectedId)));
+
+        final var input = new UpdateCategoryInputData(
+                expectedName,
+                expectedDescription,
+                expectedIsActive
+        );
+
+        final var request = put("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
 
         final var response = this.mvc.perform(request).andDo(print());
 
-        response.andExpect(status().isNotFound());
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(expectedId)));
 
-        verify(findByIdUseCase, times(1)).execute(eq(expectedId));
-
+        verify(updateUseCase, times(1)).execute(argThat(cmd ->
+                Objects.equals(expectedName, cmd.getName())
+                && Objects.equals(expectedDescription, cmd.getDescription())
+                && Objects.equals(expectedIsActive, cmd.getIsActive())
+                ));
 
     }
+
 }

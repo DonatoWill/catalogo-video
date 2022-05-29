@@ -14,6 +14,7 @@ import com.fullcycle.catalogovideo.usecase.category.findall.IFindAllCategoryUseC
 import com.fullcycle.catalogovideo.usecase.category.get.IFindByIdCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.IUpdateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
+import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeEach;
@@ -196,16 +197,6 @@ public class CategoryControllerTests {
                 true
         );
 
-        CategoryOutputData output = new CategoryOutputData(
-                entity.getId().getValue(),
-                entity.getName(),
-                entity.getDescription(),
-                entity.isIsActive(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getDeletedAt()
-        );
-
         UpdateCategoryInputData input = new UpdateCategoryInputData();
         input.setId(entity.getId().getValue());
         input.setName("Horror");
@@ -214,7 +205,7 @@ public class CategoryControllerTests {
 
         String payload = updateJson.write(input).getJson();
 
-        when(updateUseCase.execute(any(UpdateCategoryInputData.class))).thenReturn(Either.right(output));
+        when(updateUseCase.execute(any(UpdateCategoryInputData.class))).thenReturn(Either.right(UpdateCategoryOutput.from(entity.getId().getValue())));
 
         mockMvc.perform(put("/categories/{id}", entity.getId().getValue())
                 .contentType(MediaType.APPLICATION_JSON)

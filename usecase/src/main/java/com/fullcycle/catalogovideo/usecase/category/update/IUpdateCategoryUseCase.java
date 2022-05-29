@@ -5,7 +5,7 @@ import com.fullcycle.catalogovideo.usecase.UseCase;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import io.vavr.control.Either;
 
-public abstract class IUpdateCategoryUseCase extends UseCase<UpdateCategoryInputData, Either<Notification, CategoryOutputData>> {
+public abstract class IUpdateCategoryUseCase extends UseCase<UpdateCategoryInputData, Either<Notification, UpdateCategoryOutput>> {
 
 
 

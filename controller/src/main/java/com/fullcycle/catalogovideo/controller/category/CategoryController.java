@@ -4,6 +4,7 @@ package com.fullcycle.catalogovideo.controller.category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
+import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
@@ -60,8 +61,16 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    public void update(String id, UpdateCategoryInputData input) {
+    public ResponseEntity<?> update(String id, UpdateCategoryInputData input) {
         input.setId(id);
-        updateUseCase.execute(input);
+
+        final Function<Notification, ResponseEntity<?>> onError = notification ->
+                ResponseEntity.unprocessableEntity().body(notification);
+
+        final Function<UpdateCategoryOutput, ResponseEntity<?>> onSuccess =
+                ResponseEntity::ok;
+
+        return updateUseCase.execute(input)
+                .fold(onError, onSuccess);
     }
 }

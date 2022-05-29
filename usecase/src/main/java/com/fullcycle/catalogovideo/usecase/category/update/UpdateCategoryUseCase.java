@@ -16,7 +16,7 @@ public class UpdateCategoryUseCase extends IUpdateCategoryUseCase {
     private ICategoryRepository repository;
 
     @Override
-    public Either<Notification, CategoryOutputData> execute(final UpdateCategoryInputData inputData) {
+    public Either<Notification, UpdateCategoryOutput> execute(final UpdateCategoryInputData inputData) {
 
         final var notification = Notification.create();
 
@@ -33,10 +33,10 @@ public class UpdateCategoryUseCase extends IUpdateCategoryUseCase {
         return notification.hasError()? API.Left(notification) : update(category);
     }
 
-    private Either<Notification, CategoryOutputData> update(Category category) {
+    private Either<Notification, UpdateCategoryOutput> update(Category category) {
         return API.Try(() -> repository.update(category))
                 .toEither()
-                .bimap(Notification::create, CategoryOutputData::fromDomain);
+                .bimap(Notification::create, UpdateCategoryOutput::from);
     }
 
 }

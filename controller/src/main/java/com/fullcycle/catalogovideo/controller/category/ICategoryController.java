@@ -64,15 +64,19 @@ public interface ICategoryController {
     })
     void deleteById(@PathVariable("id") String id);
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @Operation(summary = "Update a category")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Category updated successfully"),
+            @ApiResponse(responseCode = "200", description = "Category updated successfully"),
             @ApiResponse(responseCode = "404", description = "Category not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    void update(@PathVariable String id, @RequestBody UpdateCategoryInputData input);
+    ResponseEntity<?> update(@PathVariable(name = "id") String id, @RequestBody UpdateCategoryInputData input);
 
 }
 
