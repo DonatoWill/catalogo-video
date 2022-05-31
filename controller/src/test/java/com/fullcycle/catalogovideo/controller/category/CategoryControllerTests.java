@@ -210,6 +210,6 @@ public class CategoryControllerTests {
         mockMvc.perform(put("/categories/{id}", entity.getId().getValue())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 }

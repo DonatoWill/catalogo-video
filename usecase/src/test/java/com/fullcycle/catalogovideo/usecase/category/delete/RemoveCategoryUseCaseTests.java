@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class RemoveCategoryUseCaseTests {
+class RemoveCategoryUseCaseTests {
 
     @InjectMocks
     private RemoveCategoryUseCase useCase;

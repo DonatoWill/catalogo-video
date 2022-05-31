@@ -3,7 +3,6 @@ package com.fullcycle.catalogovideo.usecase.category.create;
 import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
-import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import io.vavr.API;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;

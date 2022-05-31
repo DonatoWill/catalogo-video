@@ -1,7 +1,6 @@
 package com.fullcycle.catalogovideo.controller.category;
 
 
-import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryOutput;

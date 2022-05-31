@@ -26,7 +26,7 @@ class CategoryTests {
 
         assertNotNull(entity);
         assert entity.getName().equals("Name 1");
-        assertEquals(entity.getDescription(), "Description 2");
+        assertEquals("Description 2", entity.getDescription());
     }
 
 
@@ -37,7 +37,7 @@ class CategoryTests {
 
         assertNotNull(entity);
         assert entity.getName().equals("Name 1");
-        assertEquals(entity.getDescription(), "Description 2");
+        assertEquals("Description 2", entity.getDescription());
         assertTrue(entity.isIsActive());
     }
 
@@ -48,7 +48,7 @@ class CategoryTests {
 
         assertNotNull(entity);
         assert entity.getName().equals("Name 1");
-        assertEquals(entity.getDescription(), "Description 2");
+        assertEquals("Description 2", entity.getDescription());
         assertFalse(entity.getIsActive());
     }
 
@@ -59,13 +59,13 @@ class CategoryTests {
 
         assertNotNull(entity);
         assert entity.getName().equals("Name 1");
-        assertEquals(entity.getDescription(), "Description 2");
+        assertEquals("Description 2", entity.getDescription());
 
         entity.update("Name 3", "Description 3", false);
 
         assertNotNull(entity);
         assert entity.getName().equals("Name 3");
-        assertEquals(entity.getDescription(), "Description 3");
+        assertEquals("Description 3", entity.getDescription());
         assertFalse(entity.getIsActive());
     }
 

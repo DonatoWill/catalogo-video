@@ -21,7 +21,7 @@ public class Pagination<T>{
     public <R> Pagination<R> map(final Function<T, R> mapper){
         final List<R> newList = this.items.stream()
                 .map(mapper)
-                .collect(Collectors.toList());
+                .toList();
         return new Pagination<>(this.currentPage, this.perPage, this.total, newList);
     }
 }

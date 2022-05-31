@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Objects;
 
@@ -180,7 +179,7 @@ public class CategoryControllerTestIT {
                 .andExpect(jsonPath("$.is_active", equalTo(expectedIsActive)))
                 .andExpect(jsonPath("$.created_at", equalTo(aCategory.getCreatedAt().toString())));
 
-        verify(findByIdUseCase, times(1)).execute(eq(expectedId));
+        verify(findByIdUseCase, times(1)).execute(expectedId);
 
     }
 
@@ -200,7 +199,7 @@ public class CategoryControllerTestIT {
         final var request = get("/categories/{id}", expectedId);
         final var response = this.mvc.perform(request).andDo(print());
         response.andExpect(status().isNotFound());
-        verify(findByIdUseCase, times(1)).execute(eq(expectedId));
+        verify(findByIdUseCase, times(1)).execute(expectedId);
 
     }
 

@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateCategoryUseCaseTests {
+class UpdateCategoryUseCaseTests {
 
     @InjectMocks
     private UpdateCategoryUseCase useCase;

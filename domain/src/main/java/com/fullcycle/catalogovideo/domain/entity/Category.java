@@ -80,6 +80,7 @@ public class Category extends AggregateRoot<CategoryID> {
         new CategoryValidator(this, handler).validate();
     }
 
+    @Override
     public CategoryID getId() {
         return this.id;
     }

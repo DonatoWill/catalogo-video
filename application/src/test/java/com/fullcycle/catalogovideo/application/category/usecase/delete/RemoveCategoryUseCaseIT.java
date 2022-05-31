@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @IntegrationTest
-public class RemoveCategoryUseCaseIT {
+class RemoveCategoryUseCaseIT {
 
     @Autowired
     private RemoveCategoryUseCase useCase;

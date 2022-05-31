@@ -1,7 +1,6 @@
 package com.fullcycle.catalogovideo.infrastructure.configuration;
 
 import com.fullcycle.catalogovideo.infrastructure.category.CategoryMySQLRepository;
-import com.fullcycle.catalogovideo.infrastructure.category.persistence.CategoryRepository;
 import com.fullcycle.catalogovideo.usecase.category.create.AbstractCreateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.delete.IRemoveCategoryUseCase;

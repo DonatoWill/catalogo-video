@@ -4,7 +4,6 @@ import com.fullcycle.catalogovideo.domain.entity.Category;
 import com.fullcycle.catalogovideo.domain.entity.CategoryID;
 import com.fullcycle.catalogovideo.domain.exceptions.NotFoundException;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
-import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.repository.ICategoryRepository;
 import io.vavr.API;
 import io.vavr.control.Either;

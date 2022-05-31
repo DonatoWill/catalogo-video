@@ -3,6 +3,7 @@ package com.fullcycle.catalogovideo.domain.validation.handler;
 import com.fullcycle.catalogovideo.domain.exceptions.DomainException;
 import com.fullcycle.catalogovideo.domain.validation.Error;
 import com.fullcycle.catalogovideo.domain.validation.ValidationHandler;
+import java.util.Collections;
 
 import java.util.List;
 
@@ -30,6 +31,6 @@ public class ThrowsValidationHandler implements ValidationHandler {
 
     @Override
     public List<Error> getErrors() {
-        return null;
+        return Collections.emptyList();
     }
 }
