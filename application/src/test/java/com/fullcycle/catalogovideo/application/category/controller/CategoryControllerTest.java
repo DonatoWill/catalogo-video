@@ -52,7 +52,7 @@ class CategoryControllerTest extends BaseIT {
     @Order(2)
     void testFindAllCategory() {
         Pagination response =
-                restTemplate.getForObject( "/categories?page=0&perPage=10&direction=asc&sort=name&terms=", Pagination.class);
+                restTemplate.getForObject( "/categories?page=0&perPage=10&dir=asc&sort=name&search=", Pagination.class);
 
         List<CategoryOutputData> categories =  Objects.requireNonNull(response.getItems());
 

@@ -132,7 +132,7 @@ public class CategoryControllerTests {
         List<CategoryOutputData> output = List.of(output1, output2);
 
         var search = CategorySearchQuery.builder()
-                        .direction("asc")
+                        .dir("asc")
                         .page(1)
                         .build();
 
@@ -143,8 +143,8 @@ public class CategoryControllerTests {
                 .param("page", "1")
                 .param("perPage", "10")
                 .param("sort", "name")
-                .param("terms", "")
-                .param("direction", "asc"))
+                .param("search", "")
+                .param("dir", "asc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }

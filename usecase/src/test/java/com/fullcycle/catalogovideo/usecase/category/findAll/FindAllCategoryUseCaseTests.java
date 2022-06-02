@@ -50,7 +50,7 @@ public class FindAllCategoryUseCaseTests {
         );
 
         CategorySearchQuery query =  CategorySearchQuery.builder()
-                .direction("asc")
+                .dir("asc")
                 .page(0)
                 .perPage(10)
                 .sort("name")
@@ -79,7 +79,7 @@ public class FindAllCategoryUseCaseTests {
         List<Category> categories = List.of();
 
         CategorySearchQuery query =  CategorySearchQuery.builder()
-                .direction("asc")
+                .dir("asc")
                 .page(0)
                 .perPage(10)
                 .sort("name")

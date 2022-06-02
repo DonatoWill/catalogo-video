@@ -33,11 +33,11 @@ public class CategoryMySQLRepository implements ICategoryRepository {
         final var page = PageRequest.of(
                 query.getPage(),
                 query.getPerPage(),
-                Sort.by(Sort.Direction.fromString(query.getDirection()), query.getSort())
+                Sort.by(Sort.Direction.fromString(query.getDir()), query.getSort())
         );
 
         // Busca dinâmica
-        final var specifications = Optional.ofNullable(query.getTerms())
+        final var specifications = Optional.ofNullable(query.getSearch())
                 .filter(str -> !str.isBlank())
                 .map(str -> SpecificationUtils
                         .<CategoryPersistence>like("name", str)

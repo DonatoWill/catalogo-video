@@ -51,7 +51,6 @@ public class UpdateCategoryUseCaseIT {
         assertEquals(expected.getDescription(), actualCategory.getDescription());
         assertEquals(expected.isIsActive(), actualCategory.isActive());
         assertNotNull(actualCategory.getCreatedAt());
-        //assertEquals(category.getCreatedAt(), actualCategory.getCreatedAt());
         assertNotNull(actualCategory.getUpdatedAt());
         assertTrue(category.getUpdatedAt().isBefore(actualCategory.getUpdatedAt()));
 

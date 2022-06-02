@@ -14,7 +14,6 @@ public class UpdateCategoryOutput {
 
     private String id;
 
-
     public static UpdateCategoryOutput from(final Category category){
         return new UpdateCategoryOutput(category.getId().getValue());
     }

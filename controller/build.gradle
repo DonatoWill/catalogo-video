@@ -36,6 +36,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 
     implementation 'io.vavr:vavr:0.10.4'
+    implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
 }
 

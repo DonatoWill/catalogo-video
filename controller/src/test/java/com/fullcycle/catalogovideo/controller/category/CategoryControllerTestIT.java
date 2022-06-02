@@ -10,6 +10,7 @@ import com.fullcycle.catalogovideo.domain.exceptions.NotFoundException;
 import com.fullcycle.catalogovideo.domain.validation.Error;
 import com.fullcycle.catalogovideo.domain.validation.handler.Notification;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
+import com.fullcycle.catalogovideo.usecase.category.common.CategorySearchQuery;
 import com.fullcycle.catalogovideo.usecase.category.create.AbstractCreateCategoryUseCase;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
@@ -20,12 +21,14 @@ import com.fullcycle.catalogovideo.usecase.category.update.IUpdateCategoryUseCas
 
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryOutput;
+import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Objects;
 
 import static io.vavr.API.Left;
@@ -38,11 +41,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ControllerTest(controllers = ICategoryController.class)
-public class CategoryControllerTestIT {
+class CategoryControllerTestIT {
 
     @Autowired
     private MockMvc mvc;
 
+    //MockBean add mock objects to the Spring application context is useful in
+    //integration tests where a particular bean, like an external service, needs to be mocked.
     @MockBean
     private AbstractCreateCategoryUseCase createUseCase;
     @MockBean
@@ -235,6 +240,145 @@ public class CategoryControllerTestIT {
                 && Objects.equals(expectedDescription, cmd.getDescription())
                 && Objects.equals(expectedIsActive, cmd.getIsActive())
                 ));
+    }
+
+    @Test
+    void givenAInvalidId_whenCallsUpdateCategory_shouldReturnNotFound() throws Exception {
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = true;
+        final var expectedId = "not-found";
+        final var expectedErrorMessage = "Category with Id not-found was not found";
+
+        when(updateUseCase.execute(any()))
+                .thenThrow(NotFoundException.with(Category.class, CategoryID.from(expectedId)));
+
+        final var input = new UpdateCategoryInputData(
+                expectedName,
+                expectedDescription,
+                expectedIsActive
+        );
+
+        final var request = put("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        final var response = this.mvc.perform(request).andDo(print());
+
+        response.andExpect(status().isNotFound())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.message", equalTo(expectedErrorMessage)));
+
+        verify(updateUseCase, times(1)).execute(argThat(cmd ->
+                Objects.equals(expectedName, cmd.getName())
+                        && Objects.equals(expectedDescription, cmd.getDescription())
+                        && Objects.equals(expectedIsActive, cmd.getIsActive())
+        ));
+    }
+
+    @Test
+    void givenAInvalidName_whenCallsUpdateCategory_shouldReturnNotFound() throws Exception {
+
+        final var expectedDescription = "A categoria mais assistida";
+        final var expectedIsActive = true;
+        final var expectedId = "123";
+        final var expectedErrorMessage = "Category with Id not-found was not found";
+
+        when(updateUseCase.execute(any()))
+                .thenReturn(Left(Notification.create(new Error("Name should not be null"))));
+
+        final var input = new UpdateCategoryInputData(
+                null,
+                expectedDescription,
+                expectedIsActive
+        );
+
+        final var request = put("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        final var response = this.mvc.perform(request).andDo(print());
+
+        response.andExpect(status().isUnprocessableEntity())
+                .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.errors", hasSize(1)))
+                .andExpect(jsonPath("$.errors[0].message", equalTo("Name should not be null")));
+
+        verify(updateUseCase, times(1)).execute(argThat(cmd ->
+                Objects.equals(null, cmd.getName())
+                        && Objects.equals(expectedDescription, cmd.getDescription())
+                        && Objects.equals(expectedIsActive, cmd.getIsActive())
+        ));
+    }
+
+
+    @Test
+    void givenAValidId_whenCallsDeleteCategory_shouldBeOk() throws Exception {
+
+        final var expectedId = "123";
+        doNothing().when(removeUseCase).execute(any());
+        final var request = delete("/categories/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(MediaType.APPLICATION_JSON_VALUE);
+        final var response = this.mvc.perform(request)
+                .andDo(print());
+
+        response.andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    void givenAValidParams_whenCallsListCategories_shouldReturnCategories() throws Exception {
+
+        final var expectedPage = 0;
+        final var expectedPerPAge = 10;
+        final var expectedTerms = "movies";
+        final var expectedSort = "description";
+        final var expectedDirection = "desc";
+        final var expectedItemsCount = 1;
+        final var expectedTotal = 1;
+        final var category = Category.newCategory("Movies", null, true);
+
+        final var expectedItems = List.of(CategoryOutputData.fromDomain(category));
+
+        when(findAllUseCase.execute(any()))
+                .thenReturn(new Pagination<>(expectedPage, expectedPerPAge, expectedTotal, expectedItems));
+
+        final var request = get("/categories")
+                .queryParam("page", String.valueOf(expectedPage))
+                .queryParam("perPage", String.valueOf(expectedPerPAge))
+                .queryParam("sort", expectedSort)
+                .queryParam("dir", expectedDirection)
+                .queryParam("search", expectedTerms)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(MediaType.APPLICATION_JSON_VALUE);
+
+        final var response = this.mvc.perform(request)
+                .andDo(print());
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.current_page", equalTo(expectedPage)))
+                .andExpect(jsonPath("$.per_page", equalTo(expectedPerPAge)))
+                .andExpect(jsonPath("$.total", equalTo(expectedTotal)))
+                .andExpect(jsonPath("$.items", hasSize(expectedItems.size())))
+                .andExpect(jsonPath("$.items[0].id", equalTo(category.getId().getValue())))
+                .andExpect(jsonPath("$.items[0].name", equalTo(category.getName())))
+                .andExpect(jsonPath("$.items[0].description", equalTo(category.getDescription())))
+                .andExpect(jsonPath("$.items[0].is_active", equalTo(category.getIsActive())))
+                .andExpect(jsonPath("$.items[0].created_at", equalTo(category.getCreatedAt().toString())));
+
+
+        verify(findAllUseCase, times(1)).execute( argThat( query ->
+                Objects.equals(0, query.getPage())
+                && Objects.equals("desc", query.getDir())
+                && Objects.equals("description", query.getSort())
+                && Objects.equals(10, query.getPerPage())
+                && Objects.equals("movies", query.getSearch())
+                )
+        );
 
     }
 

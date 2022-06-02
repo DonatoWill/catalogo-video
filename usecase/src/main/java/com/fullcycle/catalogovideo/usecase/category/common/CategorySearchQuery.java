@@ -1,5 +1,6 @@
 package com.fullcycle.catalogovideo.usecase.category.common;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.Data;
 public class CategorySearchQuery {
     int page;
     int perPage;
-    String terms;
+    String search;
     String sort;
-    String direction;
+    String dir;
 }
