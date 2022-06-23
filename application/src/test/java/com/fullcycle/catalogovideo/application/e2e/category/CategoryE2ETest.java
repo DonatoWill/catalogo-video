@@ -1,14 +1,12 @@
-package com.fullcycle.catalogovideo.application.category.controller;
+package com.fullcycle.catalogovideo.application.e2e.category;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcycle.catalogovideo.application.BaseIT;
-import com.fullcycle.catalogovideo.domain.exceptions.DomainException;
 import com.fullcycle.catalogovideo.usecase.category.common.CategoryOutputData;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.category.create.CreateCategoryOutput;
 import com.fullcycle.catalogovideo.usecase.category.update.UpdateCategoryInputData;
 import com.fullcycle.catalogovideo.usecase.pagination.Pagination;
-import net.minidev.json.parser.JSONParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -24,7 +22,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CategoryControllerTest extends BaseIT {
+class CategoryE2ETest extends BaseIT {
 
     private JacksonTester<CreateCategoryInputData> createJson;
 
@@ -82,6 +80,16 @@ class CategoryControllerTest extends BaseIT {
 
         assertNotNull(category);
         assertNotNull(category.getId());
+
+        ResponseEntity<CategoryOutputData> createdCategory = restTemplate.getForEntity( "/categories/{id}",CategoryOutputData.class, category.getId());
+
+        final var createdCategoryBody = createdCategory.getBody();
+
+        assertNotNull(createdCategoryBody.getName());
+        assertEquals(input.getName(), createdCategoryBody.getName());
+        assertNotNull(createdCategoryBody.getDescription());
+        assertEquals(input.getDescription(), createdCategoryBody.getDescription());
+        assertEquals(input.getIsActive(), createdCategoryBody.isActive());
     }
 
     @Test
